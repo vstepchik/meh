@@ -30,11 +30,13 @@ public class SwingUserInputHandler extends AbstractUserInputHandler
     @Override
     public void keyPressed(KeyEvent e) {
         processKeyboardButtonPressed(KeyboardButton.get(e.getKeyCode()));
+        e.consume();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         processKeyboardButtonReleased(KeyboardButton.get(e.getKeyCode()));
+        e.consume();
     }
 
     @Override

@@ -4,12 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SwingGameWindow implements GameWindow {
-    protected static final String FRAME_TITLE = "Meh";
-    protected static final Dimension FRAME_SIZE = new Dimension(200, 300);
+    public static final Dimension DEFAULT_FRAME_SIZE = new Dimension(400, 400);
     private final JFrame frame;
 
-    public SwingGameWindow() {
-        frame = createGameFrame(FRAME_TITLE, FRAME_SIZE);
+    public SwingGameWindow(String title, Dimension size) {
+        frame = createGameFrame(title, size);
     }
 
     @Override
@@ -48,7 +47,10 @@ public class SwingGameWindow implements GameWindow {
         frame.setMinimumSize(size);
         frame.setPreferredSize(size);
 
-        // TODO: add input listener
+        // input handling
+        frame.setFocusTraversalKeysEnabled(false);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setUndecorated(true);
 
         return frame;
     }
