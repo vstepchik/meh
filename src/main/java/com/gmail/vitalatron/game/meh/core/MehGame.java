@@ -18,7 +18,7 @@ public class MehGame {
     protected final InputHandler inputListener;
 
     public MehGame() {
-        SwingGameWindow swingGameWindow = new SwingGameWindow(GAME_TITLE, new Dimension(200, 300));
+        SwingGameWindow swingGameWindow = new SwingGameWindow(GAME_TITLE, new Dimension(150, 190));
         this.gameWindow = swingGameWindow;
         this.userInputHandler = new SwingUserInputHandler(swingGameWindow.getFrame());
         this.gameLoop = new ExecutorGameLoop();
