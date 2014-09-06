@@ -18,6 +18,7 @@ public class MehBrain {
     protected final Map<String, Image> imageMap;
     protected final TetraminoeDispenser tetraminoeDispenser;
 
+    protected final Well well;
     protected final PressStartButtonMessage pressStartButtonMessage;
     protected final PauseMessage pauseMessage;
     protected final Score score;
@@ -37,12 +38,14 @@ public class MehBrain {
         this.tetraminoeDispenser = new TetraminoeDispenser(TetraminoeLoader.loadTetraminoeDefinitions("/tetraminoes"));
         this.score = new Score(111, 18);
         this.score.setVisible(false);
+        this.well = new Well(5, 5, 10, 20, imageMap.get("block"));
 
         userInputHandler.addListener(new MehInputHandler(this));
         gameWindow.addDrawableItem(makeBackgroundSprite());
         gameWindow.addDrawableItem(pressStartButtonMessage);
         gameWindow.addDrawableItem(pauseMessage);
         gameWindow.addDrawableItem(score);
+        gameWindow.addDrawableItem(well);
     }
 
     protected Sprite makeBackgroundSprite() {

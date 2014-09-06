@@ -6,7 +6,6 @@ public class Tetraminoe {
     protected Block[][] blocks;
     protected int side;
     protected Point coordinates = new Point();
-    protected String stringView;
 
     Tetraminoe(Block[][] blocks) {
         if (blocks.length <= 0 || blocks.length != blocks[0].length) {
@@ -53,6 +52,22 @@ public class Tetraminoe {
                 blocks[y][x] = t;
             }
         }
+    }
+
+    public Point getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Point coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public int getSide() {
+        return side;
+    }
+
+    public Block getBlockAt(int x, int y) {
+        return blocks[y][x];
     }
 
     @Override
