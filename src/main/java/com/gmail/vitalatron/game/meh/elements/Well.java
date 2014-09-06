@@ -22,12 +22,6 @@ public class Well implements Drawable {
         this.block = block;
 
         this.level = new Block[height][width];
-
-        level[10][0] = new Block();
-        level[10][2] = new Block();
-        level[10][4] = new Block();
-        level[10][6] = new Block();
-        level[10][8] = new Block();
     }
 
     public void putTetramioe(Tetraminoe tm) {
@@ -48,9 +42,8 @@ public class Well implements Drawable {
                     int x = tx + col;
                     int y = ty + row;
                     if (tetraminoe.getBlockAt(col, row) != null
-                            && (((y >= height) || (y >= 0 && level[y][x] != null)
-                                || (x >= width) || (x < 0) || (y >= 0 && level[y][x] != null)
-                    ))) {
+                            && ((!isOutOfScreen(x, y, false) && level[y][x] != null)
+                            || isOutOfScreen(x, y, true))) {
                         return false;
                     }
                 }
@@ -79,6 +72,10 @@ public class Well implements Drawable {
 
     protected void findAndRemoveFullRows() {
         System.out.println("looking for rows");
+    }
+
+    protected boolean isOutOfScreen(int x, int y, boolean allowNegativeY) {
+        return !((x >= 0 && x < width) && ((allowNegativeY || y >= 0) && y < height));
     }
 
     @Override

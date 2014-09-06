@@ -24,9 +24,10 @@ public abstract class AbstractUserInputHandler implements UserInputHandler {
     }
 
     protected void processKeyboardButtonPressed(KeyboardButton btn) {
-        pressedKeys.add(btn);
-        for (UserInputListener listener : inputListenerList) {
-            listener.keyPressed(btn);
+        if (pressedKeys.add(btn)) { // prevents repeated notifications while button is held
+            for (UserInputListener listener : inputListenerList) {
+                listener.keyPressed(btn);
+            }
         }
     }
 

@@ -28,6 +28,7 @@ public class MehBrain {
     protected Tetraminoe fallingTetraminoe;
     protected boolean paused = false;
     protected boolean started = false;
+    protected MoveDirection moveDirection = MoveDirection.NONE;
 
     public MehBrain(GameWindow gameWindow, UserInputHandler userInputHandler, Map<String, Image> imageMap) {
         this.gameWindow = gameWindow;
@@ -46,7 +47,7 @@ public class MehBrain {
         this.preview = new NextTetraminoePreview(112, 40, imageMap.get("block_small"));
         this.well = new Well(5, 5, 10, 20, imageMap.get("block"));
 
-        userInputHandler.addListener(new MehInputHandler(this));
+        userInputHandler.addListener(new MehInputHandler(this, userInputHandler));
         gameWindow.addDrawableItem(makeBackgroundSprite());
         gameWindow.addDrawableItem(pressStartButtonMessage);
         gameWindow.addDrawableItem(pauseMessage);
@@ -82,7 +83,11 @@ public class MehBrain {
         this.pauseMessage.setVisible(paused);
     }
 
-    public void moveBlockLeft() {
+    public void setMoveDirection(MoveDirection moveDirection) {
+        this.moveDirection = moveDirection;
+    }
+
+    public void moveTetraminoeLeft() {
         if (fallingTetraminoe == null) {
             return;
         }
@@ -91,7 +96,7 @@ public class MehBrain {
         }
     }
 
-    public void moveBlockRight() {
+    public void moveTetraminoeRight() {
         if (fallingTetraminoe == null) {
             return;
         }
@@ -131,6 +136,18 @@ public class MehBrain {
             if (timeout < 0) {
                 timeout = INITIAL_TIMEOUT - (long)(score.getScore() * SCORE_FACTOR);
                 descendTetraminoe();
+            }
+
+            switch (moveDirection) {
+                case DOWN:
+                    descendTetraminoe();
+                    break;
+                case LEFT:
+                    moveTetraminoeLeft();
+                    break;
+                case RIGHT:
+                    moveTetraminoeRight();
+                    break;
             }
         }
     }

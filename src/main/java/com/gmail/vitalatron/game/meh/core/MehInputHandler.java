@@ -2,39 +2,36 @@ package com.gmail.vitalatron.game.meh.core;
 
 import com.gmail.vitalatron.game.input.KeyboardButton;
 import com.gmail.vitalatron.game.input.UserInputAdapter;
+import com.gmail.vitalatron.game.input.UserInputHandler;
 import com.gmail.vitalatron.game.meh.input.*;
 
 import java.util.EnumMap;
+import java.util.EnumSet;
+
+import static com.gmail.vitalatron.game.input.KeyboardButton.*;
 
 public class MehInputHandler extends UserInputAdapter {
     protected final MehBrain brain;
-    protected final EnumMap<KeyboardButton, Action> actionMap = new EnumMap<KeyboardButton, Action>(KeyboardButton.class);
+    protected final EnumMap<KeyboardButton, Action> actionMap = new EnumMap<>(KeyboardButton.class);
+    protected final UserInputHandler handler;
 
-    public MehInputHandler(MehBrain brain) {
+    public MehInputHandler(MehBrain brain, UserInputHandler handler) {
         this.brain = brain;
+        this.handler = handler;
 
         Action exit = new ExitAction();
         Action pause = new PauseAction(brain);
         Action start = new StartAction(brain);
-        Action moveLeft = new MoveLeftAction(brain);
-        Action moveRight = new MoveRightAction(brain);
-        Action drop = new DropAction(brain);
         Action rotate = new RotateAction(brain);
 
-        actionMap.put(KeyboardButton.ESC, exit);
-        actionMap.put(KeyboardButton.P, pause);
-        actionMap.put(KeyboardButton.PAUSE, pause);
-        actionMap.put(KeyboardButton.ENTER, start);
-        actionMap.put(KeyboardButton.SPACE, start);
+        actionMap.put(ESC, exit);
+        actionMap.put(P, pause);
+        actionMap.put(PAUSE, pause);
+        actionMap.put(ENTER, start);
+        actionMap.put(SPACE, start);
 
-        actionMap.put(KeyboardButton.LEFT, moveLeft);
-        actionMap.put(KeyboardButton.A, moveLeft);
-        actionMap.put(KeyboardButton.RIGHT, moveRight);
-        actionMap.put(KeyboardButton.D, moveRight);
-        actionMap.put(KeyboardButton.UP, rotate);
-        actionMap.put(KeyboardButton.W, rotate);
-        actionMap.put(KeyboardButton.DOWN, drop);
-        actionMap.put(KeyboardButton.S, drop);
+        actionMap.put(UP, rotate);
+        actionMap.put(W, rotate);
     }
 
     @Override
@@ -43,5 +40,35 @@ public class MehInputHandler extends UserInputAdapter {
         if (mappedAction != null) {
             mappedAction.perform();
         }
+        notifyBrainDirection();
+    }
+
+    @Override
+    public void keyReleased(KeyboardButton button) {
+        notifyBrainDirection();
+    }
+
+    protected void notifyBrainDirection() {
+        KeyboardButton button = handler.getLastButtonPressedOf(EnumSet.of(LEFT, DOWN, RIGHT, S, A, D));
+
+        MoveDirection direction = MoveDirection.NONE;
+        if (button != null) {
+            switch (button) {
+                case DOWN:
+                case S:
+                    direction = MoveDirection.DOWN;
+                    break;
+                case RIGHT:
+                case D:
+                    direction = MoveDirection.RIGHT;
+                    break;
+                case LEFT:
+                case A:
+                    direction = MoveDirection.LEFT;
+                    break;
+            }
+        }
+        System.out.println(direction);
+        brain.setMoveDirection(direction);
     }
 }
