@@ -68,7 +68,7 @@ public class MehInputHandler extends UserInputAdapter {
                     break;
             }
         }
-        System.out.println(direction);
+
         brain.setMoveDirection(direction);
     }
 }

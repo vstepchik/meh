@@ -13,6 +13,9 @@ import java.util.Map;
 
 public class MehBrain {
 
+    private static final int BASE_SCORE = 100;
+    private static final int BONUS_PER_ADDITIONAL_ROW = 50;
+
     protected final GameWindow gameWindow;
     protected final TimedLoop gameLoop;
     protected final UserInputHandler userInputHandler;
@@ -45,7 +48,7 @@ public class MehBrain {
         this.score = new Score(111, 18);
         this.score.setVisible(false);
         this.preview = new NextTetraminoePreview(112, 40, imageMap.get("block_small"));
-        this.well = new Well(5, 5, 10, 20, imageMap.get("block"));
+        this.well = new Well(5, 5, 10, 20, imageMap.get("block"), this);
 
         userInputHandler.addListener(new MehInputHandler(this, userInputHandler));
         gameWindow.addDrawableItem(makeBackgroundSprite());
@@ -123,10 +126,18 @@ public class MehBrain {
         }
     }
 
+    public void rowsFilled(int rowsFilled) {
+        if (rowsFilled == 0) {
+            return;
+        }
+        int sc = BASE_SCORE + (rowsFilled - 1) * BONUS_PER_ADDITIONAL_ROW;
+        score.setScore(score.getScore() + sc);
+    }
+
     protected class GameStep implements GameTask {
         protected final long INITIAL_TIMEOUT = 100000;
         protected final long INITIAL_SPEED = 5000;
-        protected final double SCORE_FACTOR = 0.01;
+        protected final double SCORE_FACTOR = 0.02;
 
         protected long timeout = INITIAL_TIMEOUT;
 
