@@ -22,6 +22,12 @@ public class Well implements Drawable {
         this.block = block;
 
         this.level = new Block[height][width];
+
+        level[10][0] = new Block();
+        level[10][2] = new Block();
+        level[10][4] = new Block();
+        level[10][6] = new Block();
+        level[10][8] = new Block();
     }
 
     public void putTetramioe(Tetraminoe tm) {
@@ -31,6 +37,48 @@ public class Well implements Drawable {
         }
 
         this.tetraminoe = tm;
+    }
+
+    public boolean canTetraminoeBeMoved(int dx, int dy) {
+        if (tetraminoe != null) {
+            int tx = tetraminoe.getCoordinates().x + dx;
+            int ty = tetraminoe.getCoordinates().y + dy;
+            for (int row = tetraminoe.getSide() - 1; row >= 0; row--) {
+                for (int col = 0; col < tetraminoe.getSide(); col++) {
+                    int x = tx + col;
+                    int y = ty + row;
+                    if (tetraminoe.getBlockAt(col, row) != null
+                            && (((y >= height) || (y >= 0 && level[y][x] != null)
+                                || (x >= width) || (x < 0) || (y >= 0 && level[y][x] != null)
+                    ))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public void applyTetraminoe() {
+        if (tetraminoe != null) {
+            int tx = tetraminoe.getCoordinates().x;
+            int ty = tetraminoe.getCoordinates().y;
+            for (int row = 0; row < tetraminoe.getSide(); row++) {
+                for (int col = 0; col < tetraminoe.getSide(); col++) {
+                    int x = tx + col;
+                    int y = ty + row;
+                    if (tetraminoe.getBlockAt(col, row) != null) {
+                        level[y][x] = tetraminoe.getBlockAt(col, row);
+                    }
+                }
+            }
+        }
+
+        findAndRemoveFullRows();
+    }
+
+    protected void findAndRemoveFullRows() {
+        System.out.println("looking for rows");
     }
 
     @Override

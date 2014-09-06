@@ -22,7 +22,7 @@ public class ExecutorGameLoop extends AbstractTimedLoop {
                 t = (lastExecutionNanoTime - t) / 1000000;
 
                 try {
-                    Thread.sleep(delay - t);
+                    Thread.sleep((delay - t < 0) ? 0 : delay - t);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

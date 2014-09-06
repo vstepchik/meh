@@ -1,6 +1,7 @@
 package com.gmail.vitalatron.game.meh.core;
 
 import com.gmail.vitalatron.game.exec.ExecutorGameLoop;
+import com.gmail.vitalatron.game.exec.GameTask;
 import com.gmail.vitalatron.game.exec.TimedLoop;
 import com.gmail.vitalatron.game.input.UserInputHandler;
 import com.gmail.vitalatron.game.meh.elements.*;
@@ -23,7 +24,9 @@ public class MehBrain {
     protected final PauseMessage pauseMessage;
     protected final Score score;
 
+    protected Tetraminoe fallingTetraminoe;
     protected boolean paused = false;
+    protected boolean started = false;
 
     public MehBrain(GameWindow gameWindow, UserInputHandler userInputHandler, Map<String, Image> imageMap) {
         this.gameWindow = gameWindow;
@@ -31,6 +34,7 @@ public class MehBrain {
         this.imageMap = imageMap;
 
         this.gameLoop = new ExecutorGameLoop();
+        this.gameLoop.addTask(new GameStep());
         this.pressStartButtonMessage = new PressStartButtonMessage(117, 184);
         this.pressStartButtonMessage.setBlinking(true);
         this.pauseMessage = new PauseMessage(116, 154);
@@ -52,10 +56,21 @@ public class MehBrain {
         return new Sprite(imageMap.get("background"));
     }
 
+    protected void nextTetraminoe() {
+        this.fallingTetraminoe = tetraminoeDispenser.next();
+        this.well.putTetramioe(fallingTetraminoe);
+    }
+
     public void start() {
+        if (started) {
+            return;
+        }
         this.score.setScore(0);
         this.score.setVisible(true);
         this.pressStartButtonMessage.setVisible(false);
+        nextTetraminoe();
+
+        started = true;
     }
 
     public void pause() {
@@ -72,11 +87,38 @@ public class MehBrain {
     }
 
     public void rotateBlock() {
-
+        if (fallingTetraminoe != null) {
+            fallingTetraminoe.rotate(true);
+        }
     }
 
-    public void dropBlock() {
+    public void descendTetraminoe() {
+        if (fallingTetraminoe == null) {
+            return;
+        }
+        if (well.canTetraminoeBeMoved(0, 1)) {
+            fallingTetraminoe.getCoordinates().y++;
+        } else {
+            well.applyTetraminoe();
+            nextTetraminoe();
+        }
+    }
 
+    protected class GameStep implements GameTask {
+        protected final long INITIAL_TIMEOUT = 100000;
+        protected final long INITIAL_SPEED = 5000;
+        protected final double SCORE_FACTOR = 0.01;
+
+        protected long timeout = INITIAL_TIMEOUT;
+
+        @Override
+        public void execute(double delta) {
+            timeout -= delta * INITIAL_SPEED;
+            if (timeout < 0) {
+                timeout = INITIAL_TIMEOUT - (long)(score.getScore() * SCORE_FACTOR);
+                descendTetraminoe();
+            }
+        }
     }
 
 }
