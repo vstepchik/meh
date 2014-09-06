@@ -19,7 +19,13 @@ public class TetraminoeDefinition {
     }
 
     public Tetraminoe constructBlock() {
-        return new Tetraminoe();
+        Block[][] blocks = new Block[TETRAMINOE_SIDE][TETRAMINOE_SIDE];
+        for (int y = 0; y < TETRAMINOE_SIDE; y++) {
+            for (int x = 0; x < TETRAMINOE_SIDE; x++) {
+                blocks[y][x] = tetraminoePattern[y][x] ? new Block() : null;
+            }
+        }
+        return new Tetraminoe(blocks);
     }
 
     @Override
