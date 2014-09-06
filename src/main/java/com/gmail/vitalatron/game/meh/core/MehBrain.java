@@ -22,6 +22,8 @@ public class MehBrain {
         this.imageMap = imageMap;
 
         this.gameLoop = new ExecutorGameLoop();
+        System.out.println(TetraminoeLoader.loadTetraminoeDefinitions("/tetraminoes"));
+
 
         userInputHandler.addListener(new MehInputHandler());
         gameWindow.addDrawableItem(makeBackgroundSprite());

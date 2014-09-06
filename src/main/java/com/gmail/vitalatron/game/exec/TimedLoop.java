@@ -1,7 +1,7 @@
 package com.gmail.vitalatron.game.exec;
 
 public interface TimedLoop {
-    public static final int DEFAULT_DELAY = 33; // 30 fps
+    public static final int DEFAULT_DELAY = 50; // 20 per second
 
     public void addTask(GameTask task);
     public void removeTask(GameTask task);

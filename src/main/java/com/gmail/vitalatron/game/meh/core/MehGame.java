@@ -19,7 +19,7 @@ public class MehGame {
     protected MehBrain mehBrain;
 
     public MehGame() {
-        SwingGameWindow swingGameWindow = new SwingGameWindow(GAME_TITLE, new Dimension(150, 190));
+        SwingGameWindow swingGameWindow = new SwingGameWindow(GAME_TITLE, new Dimension(150, 210));
         this.gameWindow = swingGameWindow;
         this.userInputHandler = new SwingUserInputHandler(swingGameWindow.getFrame());
     }
