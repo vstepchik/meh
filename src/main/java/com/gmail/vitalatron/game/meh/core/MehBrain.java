@@ -3,9 +3,7 @@ package com.gmail.vitalatron.game.meh.core;
 import com.gmail.vitalatron.game.exec.ExecutorGameLoop;
 import com.gmail.vitalatron.game.exec.TimedLoop;
 import com.gmail.vitalatron.game.input.UserInputHandler;
-import com.gmail.vitalatron.game.meh.elements.PauseMessage;
-import com.gmail.vitalatron.game.meh.elements.PressStartButtonMessage;
-import com.gmail.vitalatron.game.meh.elements.TetraminoeDispenser;
+import com.gmail.vitalatron.game.meh.elements.*;
 import com.gmail.vitalatron.game.visual.GameWindow;
 import com.gmail.vitalatron.game.visual.Sprite;
 
@@ -22,9 +20,9 @@ public class MehBrain {
 
     protected final PressStartButtonMessage pressStartButtonMessage;
     protected final PauseMessage pauseMessage;
+    protected final Score score;
 
     protected boolean paused = false;
-    protected int score = 0;
 
     public MehBrain(GameWindow gameWindow, UserInputHandler userInputHandler, Map<String, Image> imageMap) {
         this.gameWindow = gameWindow;
@@ -37,11 +35,14 @@ public class MehBrain {
         this.pauseMessage = new PauseMessage(116, 154);
         this.pauseMessage.setVisible(paused);
         this.tetraminoeDispenser = new TetraminoeDispenser(TetraminoeLoader.loadTetraminoeDefinitions("/tetraminoes"));
+        this.score = new Score(111, 18);
+        this.score.setVisible(false);
 
         userInputHandler.addListener(new MehInputHandler(this));
         gameWindow.addDrawableItem(makeBackgroundSprite());
         gameWindow.addDrawableItem(pressStartButtonMessage);
         gameWindow.addDrawableItem(pauseMessage);
+        gameWindow.addDrawableItem(score);
     }
 
     protected Sprite makeBackgroundSprite() {
@@ -49,7 +50,9 @@ public class MehBrain {
     }
 
     public void start() {
-
+        this.score.setScore(0);
+        this.score.setVisible(true);
+        this.pressStartButtonMessage.setVisible(false);
     }
 
     public void pause() {
