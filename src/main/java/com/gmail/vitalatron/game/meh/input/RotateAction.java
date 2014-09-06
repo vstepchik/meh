@@ -11,6 +11,6 @@ public class RotateAction extends Action {
 
     @Override
     public void perform() {
-        System.out.println("NOT IMPLEMENTED");
+        brain.rotateTeraminoe();
     }
 }

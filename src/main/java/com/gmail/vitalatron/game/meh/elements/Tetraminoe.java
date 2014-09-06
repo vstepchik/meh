@@ -37,8 +37,8 @@ public class Tetraminoe {
     protected void reverseCols() {
         for (int y = 0; y < side / 2; y++) {
             for (int x = 0; x < side; x++) {
-                Block t = blocks[side - y][x];
-                blocks[side - y][x] = blocks[y][x];
+                Block t = blocks[side - y - 1][x];
+                blocks[side - y - 1][x] = blocks[y][x];
                 blocks[y][x] = t;
             }
         }
@@ -47,8 +47,8 @@ public class Tetraminoe {
     protected void reverseRows() {
         for (int y = 0; y < side; y++) {
             for (int x = 0; x < side / 2; x++) {
-                Block t = blocks[y][side - x];
-                blocks[y][side - x] = blocks[y][x];
+                Block t = blocks[y][side - x - 1];
+                blocks[y][side - x - 1] = blocks[y][x];
                 blocks[y][x] = t;
             }
         }

@@ -23,6 +23,7 @@ public class MehBrain {
     protected final PressStartButtonMessage pressStartButtonMessage;
     protected final PauseMessage pauseMessage;
     protected final Score score;
+    protected final NextTetraminoePreview preview;
 
     protected Tetraminoe fallingTetraminoe;
     protected boolean paused = false;
@@ -42,6 +43,7 @@ public class MehBrain {
         this.tetraminoeDispenser = new TetraminoeDispenser(TetraminoeLoader.loadTetraminoeDefinitions("/tetraminoes"));
         this.score = new Score(111, 18);
         this.score.setVisible(false);
+        this.preview = new NextTetraminoePreview(112, 40, imageMap.get("block_small"));
         this.well = new Well(5, 5, 10, 20, imageMap.get("block"));
 
         userInputHandler.addListener(new MehInputHandler(this));
@@ -49,6 +51,7 @@ public class MehBrain {
         gameWindow.addDrawableItem(pressStartButtonMessage);
         gameWindow.addDrawableItem(pauseMessage);
         gameWindow.addDrawableItem(score);
+        gameWindow.addDrawableItem(preview);
         gameWindow.addDrawableItem(well);
     }
 
@@ -58,6 +61,7 @@ public class MehBrain {
 
     protected void nextTetraminoe() {
         this.fallingTetraminoe = tetraminoeDispenser.next();
+        this.preview.setTetraminoe(tetraminoeDispenser.peek());
         this.well.putTetramioe(fallingTetraminoe);
     }
 
@@ -79,14 +83,24 @@ public class MehBrain {
     }
 
     public void moveBlockLeft() {
-
+        if (fallingTetraminoe == null) {
+            return;
+        }
+        if (well.canTetraminoeBeMoved(-1, 0)) {
+            fallingTetraminoe.getCoordinates().x--;
+        }
     }
 
     public void moveBlockRight() {
-
+        if (fallingTetraminoe == null) {
+            return;
+        }
+        if (well.canTetraminoeBeMoved(1, 0)) {
+            fallingTetraminoe.getCoordinates().x++;
+        }
     }
 
-    public void rotateBlock() {
+    public void rotateTeraminoe() {
         if (fallingTetraminoe != null) {
             fallingTetraminoe.rotate(true);
         }
