@@ -7,10 +7,10 @@ import com.gmail.vitalatron.game.meh.input.ExitAction;
 
 import java.util.EnumMap;
 
-public class InputHandler extends UserInputAdapter {
+public class MehInputHandler extends UserInputAdapter {
     protected final EnumMap<KeyboardButton, Action> actionMap = new EnumMap<KeyboardButton, Action>(KeyboardButton.class);
 
-    public InputHandler() {
+    public MehInputHandler() {
         actionMap.put(KeyboardButton.ESC, new ExitAction());
     }
 

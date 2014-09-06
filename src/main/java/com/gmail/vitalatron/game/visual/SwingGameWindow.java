@@ -4,30 +4,42 @@ import com.gmail.vitalatron.game.exec.GameTask;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class SwingGameWindow extends AbstractGameWindow {
     public static final Dimension DEFAULT_FRAME_SIZE = new Dimension(400, 400);
+    private BufferedImage screenImage;
     private final JFrame frame;
 
     public SwingGameWindow(String title) {
         this(title, DEFAULT_FRAME_SIZE);
     }
 
-    public SwingGameWindow(String title, Dimension size) {
-        final Canvas canvas = new Canvas();
-        frame = createGameFrame(title, size, canvas);
+    public SwingGameWindow(String title, final Dimension size) {
+        final JPanel screen = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(screenImage, 0, 0, null);
+            }
+        };
+        screen.setBackground(Color.DARK_GRAY);
+        screen.setDoubleBuffered(true);
 
+        screenImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
+        frame = createGameFrame(title, size, screen);
         repaintTask = new GameTask() {
-            private Canvas c = canvas;
 
             @Override
             public void execute(double delta) {
-                Graphics2D g = (Graphics2D) c.getGraphics();
+                Graphics2D g = (Graphics2D) screenImage.getGraphics();
                 for (Drawable item : drawableItems) {
                     item.draw(g);
                 }
+                screen.repaint();
             }
         };
+        repaintLoop.addTask(repaintTask);
     }
 
     @Override

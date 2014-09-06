@@ -14,7 +14,6 @@ public abstract class AbstractGameWindow implements GameWindow {
 
     public AbstractGameWindow() {
         repaintLoop = new ExecutorGameLoop();
-        repaintLoop.addTask(repaintTask);
     }
 
     @Override
