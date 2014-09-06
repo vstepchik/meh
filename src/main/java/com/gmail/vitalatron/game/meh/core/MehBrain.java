@@ -77,6 +77,7 @@ public class MehBrain {
         if (started) {
             return;
         }
+        this.well.clear();
         this.score.setScore(0);
         this.score.setVisible(true);
         this.pressStartButtonMessage.setVisible(false);
@@ -88,6 +89,15 @@ public class MehBrain {
     public void pause() {
         paused = !paused;
         this.pauseMessage.setVisible(paused);
+    }
+
+    public void gameOver() {
+        if (!started) {
+            return;
+        }
+        this.started = false;
+        this.pressStartButtonMessage.setVisible(true);
+        System.out.println("GAME OVER");
     }
 
     public void setMoveDirection(MoveDirection moveDirection) {

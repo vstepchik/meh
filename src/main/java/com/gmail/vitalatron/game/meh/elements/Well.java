@@ -64,7 +64,11 @@ public class Well implements Drawable {
                     int x = tx + col;
                     int y = ty + row;
                     if (tetraminoe.getBlockAt(col, row) != null) {
-                        level[y][x] = tetraminoe.getBlockAt(col, row);
+                        if (!isOutOfScreen(x, y, false)) {
+                            level[y][x] = tetraminoe.getBlockAt(col, row);
+                        } else {
+                            brain.gameOver();
+                        }
                     }
                 }
             }
@@ -128,6 +132,14 @@ public class Well implements Drawable {
                         g.drawImage(block, this.x + (tx + col) * blockWidth, this.y + (ty + row) * blockHeight, null);
                     }
                 }
+            }
+        }
+    }
+
+    public void clear() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                level[y][x] = null;
             }
         }
     }
