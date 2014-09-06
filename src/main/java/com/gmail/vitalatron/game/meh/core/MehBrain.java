@@ -14,7 +14,7 @@ import java.util.Map;
 public class MehBrain {
 
     private static final int BASE_SCORE = 100;
-    private static final int BONUS_PER_ADDITIONAL_ROW = 50;
+    private static final int BONUS_PER_ADDITIONAL_ROW = 150;
 
     protected final GameWindow gameWindow;
     protected final TimedLoop gameLoop;
@@ -69,6 +69,10 @@ public class MehBrain {
         this.well.putTetramioe(fallingTetraminoe);
     }
 
+    public boolean isGameRunning() {
+        return !paused && started;
+    }
+
     public void start() {
         if (started) {
             return;
@@ -91,7 +95,7 @@ public class MehBrain {
     }
 
     public void moveTetraminoeLeft() {
-        if (fallingTetraminoe == null) {
+        if (fallingTetraminoe == null || !isGameRunning()) {
             return;
         }
         if (well.canTetraminoeBeMoved(-1, 0)) {
@@ -100,7 +104,7 @@ public class MehBrain {
     }
 
     public void moveTetraminoeRight() {
-        if (fallingTetraminoe == null) {
+        if (fallingTetraminoe == null || !isGameRunning()) {
             return;
         }
         if (well.canTetraminoeBeMoved(1, 0)) {
@@ -109,13 +113,13 @@ public class MehBrain {
     }
 
     public void rotateTeraminoe() {
-        if (fallingTetraminoe != null) {
+        if (fallingTetraminoe != null && isGameRunning()) {
             fallingTetraminoe.rotate(true);
         }
     }
 
     public void descendTetraminoe() {
-        if (fallingTetraminoe == null) {
+        if (fallingTetraminoe == null || !isGameRunning()) {
             return;
         }
         if (well.canTetraminoeBeMoved(0, 1)) {
@@ -143,6 +147,10 @@ public class MehBrain {
 
         @Override
         public void execute(double delta) {
+            if (!isGameRunning()) {
+                return;
+            }
+
             timeout -= delta * INITIAL_SPEED;
             if (timeout < 0) {
                 timeout = INITIAL_TIMEOUT - (long)(score.getScore() * SCORE_FACTOR);
