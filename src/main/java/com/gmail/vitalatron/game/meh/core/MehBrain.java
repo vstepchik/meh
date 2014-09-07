@@ -27,6 +27,7 @@ public class MehBrain {
     protected final PauseMessage pauseMessage;
     protected final Score score;
     protected final NextTetraminoePreview preview;
+    protected final GameOverMessage gameOverMessage;
 
     protected Tetraminoe fallingTetraminoe;
     protected boolean paused = false;
@@ -44,8 +45,10 @@ public class MehBrain {
         this.pressStartButtonMessage.setBlinking(true);
         this.pauseMessage = new PauseMessage(116, 154);
         this.pauseMessage.setVisible(paused);
+        this.gameOverMessage = new GameOverMessage(116, 165);
+        this.gameOverMessage.setVisible(false);
         this.tetraminoeDispenser = new TetraminoeDispenser(TetraminoeLoader.loadTetraminoeDefinitions("/tetraminoes"));
-        this.score = new Score(111, 18);
+        this.score = new Score(111, 12);
         this.score.setVisible(false);
         this.preview = new NextTetraminoePreview(112, 40, imageMap.get("block_small"));
         this.well = new Well(5, 5, 10, 20, imageMap.get("block"), this);
@@ -54,6 +57,7 @@ public class MehBrain {
         gameWindow.addDrawableItem(makeBackgroundSprite());
         gameWindow.addDrawableItem(pressStartButtonMessage);
         gameWindow.addDrawableItem(pauseMessage);
+        gameWindow.addDrawableItem(gameOverMessage);
         gameWindow.addDrawableItem(score);
         gameWindow.addDrawableItem(preview);
         gameWindow.addDrawableItem(well);
@@ -80,6 +84,7 @@ public class MehBrain {
         this.well.clear();
         this.score.setScore(0);
         this.score.setVisible(true);
+        this.gameOverMessage.setVisible(false);
         this.pressStartButtonMessage.setVisible(false);
         nextTetraminoe();
 
@@ -97,7 +102,7 @@ public class MehBrain {
         }
         this.started = false;
         this.pressStartButtonMessage.setVisible(true);
-        System.out.println("GAME OVER");
+        this.gameOverMessage.setVisible(true);
     }
 
     public void setMoveDirection(MoveDirection moveDirection) {
