@@ -55,6 +55,30 @@ public class Well implements Drawable {
         return true;
     }
 
+    public boolean canTetraminoeBeRotated(boolean clockwise) {
+        if (tetraminoe != null) {
+            Tetraminoe rotateTest = new Tetraminoe(tetraminoe.rotations);
+            rotateTest.setCoordinates(tetraminoe.getCoordinates());
+            rotateTest.rotation = tetraminoe.rotation;
+            rotateTest.rotate(clockwise);
+            int tx = rotateTest.getCoordinates().x;
+            int ty = rotateTest.getCoordinates().y;
+
+            for (int row = 0; row < rotateTest.getSide(); row++) {
+                for (int col = 0; col < rotateTest.getSide(); col++) {
+                    int x = tx + col;
+                    int y = ty + row;
+                    if (rotateTest.getBlockAt(col, row) != null
+                            && ((!isOutOfScreen(x, y, false) && level[y][x] != null)
+                            || isOutOfScreen(x, y, true))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public void applyTetraminoe() {
         if (tetraminoe != null) {
             int tx = tetraminoe.getCoordinates().x;

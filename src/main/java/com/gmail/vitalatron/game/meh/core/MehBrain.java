@@ -123,7 +123,10 @@ public class MehBrain {
     }
 
     public void rotateTeraminoe() {
-        if (fallingTetraminoe != null && isGameRunning()) {
+        if (fallingTetraminoe == null || !isGameRunning()) {
+            return;
+        }
+        if (well.canTetraminoeBeRotated(true)) {
             fallingTetraminoe.rotate(true);
         }
     }
