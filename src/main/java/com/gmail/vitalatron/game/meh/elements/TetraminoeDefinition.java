@@ -1,45 +1,46 @@
 package com.gmail.vitalatron.game.meh.elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TetraminoeDefinition {
     public static final int TETRAMINOE_SIDE = 4;
     public static final int TETRAMINOE_SPACE = TETRAMINOE_SIDE * TETRAMINOE_SIDE;
 
-    protected boolean tetraminoePattern[][] = new boolean[TETRAMINOE_SIDE][TETRAMINOE_SIDE];
+    protected List<boolean[][]> tetraminoeRotationPatterns = new ArrayList<>();
     protected String stringView;
 
-    public TetraminoeDefinition(boolean... pattern) {
-        if (pattern.length != TETRAMINOE_SPACE) {
+    public TetraminoeDefinition(List<boolean[]> rotationPatterns) {
+        if (rotationPatterns.isEmpty()) {
+            throw new IllegalArgumentException("At least one pattern should be provided");
+        }
+        if (rotationPatterns.get(0).length != TETRAMINOE_SPACE) {
             throw new IllegalArgumentException("Tetraminoe must consist of " + TETRAMINOE_SPACE + " blocks");
         }
-        int counter = 0;
-        for (boolean b : pattern) {
-            tetraminoePattern[counter / TETRAMINOE_SIDE][counter % TETRAMINOE_SIDE] = b;
-            counter++;
+        for (boolean[] pattern : rotationPatterns) {
+            int counter = 0;
+            boolean[][] tetraminoePattern = new boolean[TETRAMINOE_SIDE][TETRAMINOE_SIDE];
+            for (boolean b : pattern) {
+                tetraminoePattern[counter / TETRAMINOE_SIDE][counter % TETRAMINOE_SIDE] = b;
+                counter++;
+            }
+            tetraminoeRotationPatterns.add(tetraminoePattern);
         }
     }
 
     public Tetraminoe constructBlock() {
-        Block[][] blocks = new Block[TETRAMINOE_SIDE][TETRAMINOE_SIDE];
-        for (int y = 0; y < TETRAMINOE_SIDE; y++) {
-            for (int x = 0; x < TETRAMINOE_SIDE; x++) {
-                blocks[y][x] = tetraminoePattern[y][x] ? new Block() : null;
-            }
-        }
-        return new Tetraminoe(blocks);
-    }
-
-    @Override
-    public String toString() {
-        if (stringView == null) {
-            StringBuilder sb = new StringBuilder();
-            for (int y = 0; y < tetraminoePattern[0].length; y++) {
-                for (int x = 0; x < tetraminoePattern.length; x++) {
-                    sb.append(tetraminoePattern[y][x] ? '#' : ' ');
+        Block[][][] rotationSet = new Block[tetraminoeRotationPatterns.size()][][];
+        for (int i = 0; i < tetraminoeRotationPatterns.size(); i++) {
+            boolean[][] rotationPattern = tetraminoeRotationPatterns.get(i);
+            Block[][] rotPatternBlocks = new Block[TETRAMINOE_SIDE][TETRAMINOE_SIDE];
+            for (int y = 0; y < TETRAMINOE_SIDE; y++) {
+                for (int x = 0; x < TETRAMINOE_SIDE; x++) {
+                    rotPatternBlocks[y][x] = rotationPattern[y][x] ? new Block() : null;
                 }
-                sb.append('\n');
             }
-            stringView = sb.toString();
+            rotationSet[i] = rotPatternBlocks;
         }
-        return stringView;
+
+        return new Tetraminoe(rotationSet);
     }
 }

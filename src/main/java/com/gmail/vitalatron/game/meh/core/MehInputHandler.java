@@ -25,6 +25,7 @@ public class MehInputHandler extends UserInputAdapter {
         Action rotate = new RotateAction(brain);
 
         actionMap.put(ESC, exit);
+        actionMap.put(Q, exit);
         actionMap.put(P, pause);
         actionMap.put(PAUSE, pause);
         actionMap.put(ENTER, start);

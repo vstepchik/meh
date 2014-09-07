@@ -151,7 +151,7 @@ public class MehBrain {
     protected class GameStep implements GameTask {
         protected final long INITIAL_TIMEOUT = 100000;
         protected final long INITIAL_SPEED = 5000;
-        protected final double SCORE_FACTOR = 0.02;
+        protected final double SCORE_FACTOR = 2.5;
 
         protected long timeout = INITIAL_TIMEOUT;
 
