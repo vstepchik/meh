@@ -16,6 +16,10 @@ public class MehBrain {
     private static final int BASE_SCORE = 100;
     private static final int BONUS_PER_ADDITIONAL_ROW = 150;
 
+    protected static final long INITIAL_TIMEOUT = 100000;
+    protected static final long INITIAL_SPEED = 5000;
+    protected static final double SCORE_FACTOR = 9.5;
+
     protected final GameWindow gameWindow;
     protected final TimedLoop gameLoop;
     protected final UserInputHandler userInputHandler;
@@ -157,9 +161,6 @@ public class MehBrain {
     }
 
     protected class GameStep implements GameTask {
-        protected final long INITIAL_TIMEOUT = 100000;
-        protected final long INITIAL_SPEED = 5000;
-        protected final double SCORE_FACTOR = 2.5;
 
         protected long timeout = INITIAL_TIMEOUT;
 
