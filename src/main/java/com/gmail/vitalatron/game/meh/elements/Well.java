@@ -29,7 +29,7 @@ public class Well implements Drawable {
 
     public void putTetramioe(Tetraminoe tm) {
         if (tm != null) {
-            Point coords = new Point((width - tm.getSide()) / 2, -tm.getSide());
+            Point coords = new Point((width - tm.getSide()) / 2, -findTetraminoeBottomShift(tm));
             tm.setCoordinates(coords);
         }
 
@@ -128,6 +128,17 @@ public class Well implements Drawable {
                 level[y][x] = (y > 0) ? level[y - 1][x] : null;
             }
         }
+    }
+
+    private int findTetraminoeBottomShift(Tetraminoe t) {
+        for (int shift = t.getSide() - 1; shift >= 0 ; shift--) {
+            for (int i = 0; i <t.getSide(); i++) {
+                if (t.getBlockAt(i, shift) != null) {
+                    return shift + 1;
+                }
+            }
+        }
+        return t.getSide();
     }
 
     protected boolean isOutOfScreen(int x, int y, boolean allowNegativeY) {
