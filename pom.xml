@@ -4,7 +4,7 @@
 
     <groupId>com.gmail.vitalatron.game</groupId>
     <artifactId>meh</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>meh</name>
